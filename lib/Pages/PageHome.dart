@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:little_backup_app/Models/Module.dart';
+import 'package:little_backup_app/Utils/UserSettings.dart';
 import 'package:little_backup_app/Widgets/Cards/CardLog.dart';
 import 'package:little_backup_app/Widgets/Cards/CardServerManagment.dart';
 import 'package:little_backup_app/Widgets/WidgetButton.dart';
@@ -18,21 +20,21 @@ class _PageHomeState extends State<PageHome> {
   Widget build(BuildContext context) {
     return WidgetMainPage(
       children: [
-        const CardServerManagment(),
-        const SizedBox(height: 20),
-        const CardLog(log: 'Test'),
-        const SizedBox(height: 20),
-        WidgetPlaceholder(
-          onTap: () {
-            print('Test');
-          },
-        ),
-        const SizedBox(height: 20),
-        WidgetButton(
-          text: 'Test',
-          onPressed: () {},
-          style: ButtonCustomStyle.white,
-        ),
+        ...UserSettings().dashboards.map((e) {
+          List<Widget> moduleWidgets = e.modules.map((element) {
+            switch (element.type) {
+              case ModuleType.serverManager:
+                return const CardServerManagment();
+              case ModuleType.log:
+                return const CardLog(log: 'Test');
+            }
+          }).toList();
+
+          return Column(
+            children: moduleWidgets,
+          );
+        }).toList(),
+        
       ],
       title: 'Backup',
     );

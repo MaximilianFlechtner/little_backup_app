@@ -1,3 +1,5 @@
+import 'package:little_backup_app/Utils/UserSettings.dart';
+
 class Store {
   static final Store _singleton = Store._internal();
 
@@ -9,6 +11,7 @@ class Store {
 
 
   Future<bool> load() async {
+      await UserSettings().load();
       return true;
   }
 }
